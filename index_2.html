@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service Hubert – Mijnslimmethuis.nl</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky: #e8f4fd;
+      --blue: #2a7fd4;
+      --blue-dark: #1a5fa0;
+      --blue-light: #5ca8e8;
+      --orange: #f97316;
+      --orange-light: #fed7aa;
+      --white: #ffffff;
+      --gray-light: #f7f9fc;
+      --gray: #6b7280;
+      --dark: #1a2233;
+      --radius: 18px;
+      --shadow: 0 4px 32px rgba(42,127,212,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid #e3edf8;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .nav-logo .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .nav-logo span {
+      font-size: 1.18rem; font-weight: 800; color: var(--dark);
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span em {
+      font-style: normal; color: var(--blue);
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--gray); font-weight: 700;
+      font-size: 0.95rem; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+
+    .nav-cta {
+      background: var(--orange); color: white; border: none;
+      padding: 10px 22px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.93rem;
+      cursor: pointer; transition: background .2s, transform .15s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: #ea6c05; transform: translateY(-1px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2.5px; background: var(--dark); border-radius: 2px; transition: .3s; }
+
+    /* HERO */
+    #home {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      background: linear-gradient(135deg, #e8f4fd 0%, #fef3e8 100%);
+      padding: 100px 5vw 60px;
+      position: relative; overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(42,127,212,0.13) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    #home::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(249,115,22,0.10) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; border: 1.5px solid #d0e7f8;
+      padding: 6px 16px; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 700; color: var(--blue);
+      margin-bottom: 1.4rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge .dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      line-height: 1.15;
+      color: var(--dark);
+      margin-bottom: 1.2rem;
+      animation: fadeUp .7s .1s ease both;
+    }
+    h1 em {
+      font-style: italic; color: var(--blue);
+    }
+
+    .hero-sub {
+      font-size: 1.08rem; color: var(--gray); line-height: 1.75;
+      margin-bottom: 2rem; font-weight: 600;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    .hero-buttons {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp .7s .3s ease both;
+    }
+    .btn-primary {
+      background: var(--blue); color: white;
+      padding: 14px 30px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      text-decoration: none; transition: background .2s, transform .15s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .btn-secondary {
+      background: white; color: var(--blue);
+      border: 2px solid var(--blue);
+      padding: 14px 30px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-secondary:hover { background: var(--sky); transform: translateY(-2px); }
+
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeIn .9s .3s ease both;
+    }
+
+    .hero-card-stack {
+      position: relative; width: 340px; height: 360px;
+    }
+    .hcard {
+      position: absolute; border-radius: 20px;
+      background: white; padding: 22px 26px;
+      box-shadow: 0 8px 40px rgba(42,127,212,0.13);
+      font-weight: 700;
+    }
+    .hcard-main {
+      top: 30px; left: 0; right: 0;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: white; text-align: center; padding: 32px 26px;
+    }
+    .hcard-main .big-icon { font-size: 3rem; margin-bottom: 10px; }
+    .hcard-main h3 { font-size: 1.3rem; font-weight: 900; margin-bottom: 4px; }
+    .hcard-main p { font-size: 0.88rem; opacity: 0.85; }
+    .hcard-float1 {
+      bottom: 10px; left: -20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem; color: var(--dark);
+      animation: float 3s ease-in-out infinite;
+    }
+    .hcard-float1 .icon { font-size: 1.6rem; }
+    .hcard-float2 {
+      top: 10px; right: -20px;
+      font-size: 0.85rem; color: var(--dark);
+      animation: float 3.5s .5s ease-in-out infinite;
+    }
+    .hcard-float2 .stars { color: #f59e0b; font-size: 1rem; }
+
+    /* TRUST BAR */
+    .trust-bar {
+      background: white; border-top: 1.5px solid #e8f0f8; border-bottom: 1.5px solid #e8f0f8;
+      padding: 22px 5vw;
+      display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; color: var(--gray); font-size: 0.93rem;
+    }
+    .trust-item .ti-icon { font-size: 1.3rem; }
+
+    /* SECTIONS COMMON */
+    section { padding: 90px 5vw; }
+    .section-label {
+      display: inline-block;
+      background: var(--sky); color: var(--blue);
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--dark); margin-bottom: 1rem; line-height: 1.2;
+    }
+    .section-title em { color: var(--blue); font-style: italic; }
+    .section-sub { color: var(--gray); font-size: 1.05rem; line-height: 1.75; font-weight: 600; max-width: 560px; }
+
+    /* OVER ONS */
+    #over-ons { background: var(--gray-light); }
+    .about-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .about-illustration {
+      display: flex; justify-content: center;
+    }
+    .about-blob {
+      width: 300px; height: 300px;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue));
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7rem;
+      box-shadow: 0 20px 60px rgba(42,127,212,0.25);
+      animation: blobmorph 8s ease-in-out infinite;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem;
+    }
+    .stat-box {
+      background: white; border-radius: var(--radius);
+      padding: 20px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-box .num {
+      font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--blue);
+    }
+    .stat-box .label { font-size: 0.82rem; color: var(--gray); font-weight: 700; margin-top: 2px; }
+
+    /* DIENSTEN */
+    #diensten { background: white; }
+    .diensten-inner { max-width: 1100px; margin: 0 auto; }
+    .diensten-header { text-align: center; margin-bottom: 3rem; }
+    .diensten-header .section-sub { margin: 0 auto; }
+    .diensten-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;
+    }
+    .dienst-card {
+      background: var(--gray-light); border-radius: var(--radius);
+      padding: 32px 28px;
+      border: 2px solid transparent;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      cursor: default;
+    }
+    .dienst-card:hover {
+      border-color: var(--blue-light);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      background: white;
+    }
+    .dienst-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      border-radius: 14px; font-size: 1.7rem;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+    .dienst-card h3 { font-size: 1.1rem; font-weight: 900; margin-bottom: 0.6rem; color: var(--dark); }
+    .dienst-card p { font-size: 0.93rem; color: var(--gray); line-height: 1.7; }
+
+    /* PRIJZEN */
+    #prijzen { background: var(--gray-light); }
+    .prijzen-inner { max-width: 1100px; margin: 0 auto; }
+    .prijzen-header { text-align: center; margin-bottom: 3rem; }
+    .prijzen-header .section-sub { margin: 0 auto; }
+    .prijzen-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+    .prijs-card {
+      background: white; border-radius: var(--radius);
+      padding: 36px 30px;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      transition: transform .2s, border-color .2s;
+      position: relative;
+    }
+    .prijs-card:hover { transform: translateY(-4px); border-color: var(--blue-light); }
+    .prijs-card.featured {
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: white; border-color: transparent;
+    }
+    .prijs-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--orange); color: white;
+      font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      padding: 5px 16px; border-radius: 50px;
+    }
+    .prijs-card h3 { font-size: 1.1rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .prijs-card.featured h3 { color: white; }
+    .prijs-card .prijs {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.8rem; color: var(--blue); margin-bottom: 0.2rem;
+    }
+    .prijs-card.featured .prijs { color: white; }
+    .prijs-card .prijs-sub { font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem; font-weight: 600; }
+    .prijs-card.featured .prijs-sub { color: rgba(255,255,255,0.7); }
+    .prijs-features { list-style: none; margin-bottom: 2rem; }
+    .prijs-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.93rem; padding: 6px 0; color: var(--dark); font-weight: 600;
+      border-bottom: 1px solid #f0f4f8;
+    }
+    .prijs-card.featured .prijs-features li { color: rgba(255,255,255,0.9); border-bottom-color: rgba(255,255,255,0.15); }
+    .prijs-features li .check { color: #4ade80; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .prijs-card.featured .prijs-features li .check { color: #86efac; }
+    .prijs-card .btn-primary { display: block; text-align: center; width: 100%; }
+    .prijs-card.featured .btn-cta {
+      display: block; text-align: center; width: 100%;
+      background: white; color: var(--blue);
+      padding: 14px 30px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      text-decoration: none; transition: all .2s;
+    }
+    .prijs-card.featured .btn-cta:hover { background: var(--sky); }
+
+    /* CONTACT */
+    #contact { background: white; }
+    .contact-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start;
+    }
+    .contact-info h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+    .contact-info p { color: var(--gray); font-size: 1rem; line-height: 1.75; font-weight: 600; margin-bottom: 2rem; }
+    .contact-detail {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 1rem; font-weight: 700; color: var(--dark);
+    }
+    .contact-detail .cd-icon {
+      width: 42px; height: 42px;
+      background: var(--sky); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+    }
+
+    .contact-form {
+      background: var(--gray-light); border-radius: var(--radius);
+      padding: 36px; box-shadow: var(--shadow);
+    }
+    .form-group { margin-bottom: 1.3rem; }
+    .form-group label { display: block; font-weight: 800; font-size: 0.9rem; margin-bottom: 6px; color: var(--dark); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 13px 16px; border-radius: 10px;
+      border: 2px solid #dde8f5;
+      background: white; font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem; color: var(--dark);
+      transition: border-color .2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--blue); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-submit {
+      background: var(--blue); color: white; border: none;
+      width: 100%; padding: 15px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      cursor: pointer; transition: background .2s, transform .15s;
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .form-success {
+      display: none; text-align: center; padding: 20px;
+      background: #f0fdf4; border-radius: 12px; border: 2px solid #86efac;
+      color: #166534; font-weight: 700;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark); color: white;
+      padding: 50px 5vw 30px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 30px;
+    }
+    .footer-brand .logo-text { font-size: 1.3rem; font-weight: 900; margin-bottom: 0.8rem; }
+    .footer-brand .logo-text em { font-style: normal; color: var(--blue-light); }
+    .footer-brand p { color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.7; font-weight: 600; }
+    .footer-col h4 { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.6rem; }
+    .footer-col ul li a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.93rem; font-weight: 600; transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--blue-light); }
+    .footer-bottom {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.4); font-size: 0.85rem; font-weight: 600; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes blobmorph {
+      0%, 100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+      33% { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
+      66% { border-radius: 55% 45% 60% 40% / 45% 55% 50% 50%; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-inner, .about-inner, .contact-inner, .footer-inner {
+        grid-template-columns: 1fr; gap: 2.5rem;
+      }
+      .hero-visual { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 560px) {
+      .footer-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .prijzen-grid, .diensten-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; top: 68px; left: 0; right: 0;
+      background: white; border-bottom: 2px solid #e3edf8;
+      padding: 1.5rem 5vw; gap: 1rem; z-index: 99;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; color: var(--dark); font-weight: 700; font-size: 1rem; padding: 6px 0;
+    }
+    .mobile-menu .nav-cta { text-align: center; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <div class="logo-icon">🏠</div>
+    <span>Service <em>Hubert</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#over-ons">Over ons</a></li>
+    <li><a href="#diensten">Diensten</a></li>
+    <li><a href="#batterij">Stekkerbatterij</a></li>
+    <li><a href="#prijzen">Prijzen</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Neem contact op</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#over-ons" onclick="toggleMenu()">Over ons</a>
+  <a href="#diensten" onclick="toggleMenu()">Diensten</a>
+  <a href="#batterij" onclick="toggleMenu()">Stekkerbatterij</a>
+  <a href="#prijzen" onclick="toggleMenu()">Prijzen</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a class="nav-cta" href="#contact" onclick="toggleMenu()">Neem contact op</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="dot"></span> Beschikbaar voor nieuwe klanten
+      </div>
+      <h1>IT hulp & <em>slim wonen</em><br/>in uw buurt</h1>
+      <p class="hero-sub">
+        Service Hubert helpt u met IT-problemen, slimme thuisoplossingen én energiebesparing.
+        Van kapotte laptop tot Home Assistant — persoonlijk, duidelijk en altijd dichtbij.
+      </p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary">Gratis adviesgesprek</a>
+        <a href="#diensten" class="btn-secondary">Bekijk diensten</a>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:2rem; animation: fadeUp .7s .4s ease both;">
+        <span style="background:white; border:1.5px solid #d0e7f8; border-radius:50px; padding:7px 16px; font-size:0.83rem; font-weight:700; color:var(--dark);">💻 IT support</span>
+        <span style="background:white; border:1.5px solid #d0e7f8; border-radius:50px; padding:7px 16px; font-size:0.83rem; font-weight:700; color:var(--dark);">🌐 Domeinnaam & e-mail</span>
+        <span style="background:white; border:1.5px solid #d0e7f8; border-radius:50px; padding:7px 16px; font-size:0.83rem; font-weight:700; color:var(--dark);">🏠 Smart home</span>
+        <span style="background:white; border:1.5px solid #d0e7f8; border-radius:50px; padding:7px 16px; font-size:0.83rem; font-weight:700; color:var(--dark);">☀️ Energiebesparing</span>
+        <span style="background:white; border:1.5px solid #d0e7f8; border-radius:50px; padding:7px 16px; font-size:0.83rem; font-weight:700; color:var(--dark);">🔋 Stekkerbatterij</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hcard hcard-main">
+          <div class="big-icon">🏡</div>
+          <h3>Slim & Zorgeloos</h3>
+          <p>Alles werkt — gewoon thuis</p>
+        </div>
+        <div class="hcard hcard-float1">
+          <span class="icon">⚡</span>
+          <div>
+            <div style="font-weight:900;color:#1a2233">Snelle service</div>
+            <div style="color:#6b7280;font-weight:600;font-size:0.8rem">Zelfde dag mogelijk</div>
+          </div>
+        </div>
+        <div class="hcard hcard-float2">
+          <div class="stars">★★★★★</div>
+          <div style="font-size:0.82rem;color:#6b7280;font-weight:700;margin-top:2px">Tevreden klanten</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="ti-icon">☀️</span> Zonne-energie optimalisatie</div>
+  <div class="trust-item"><span class="ti-icon">🔋</span> Stekkerbatterij specialist</div>
+  <div class="trust-item"><span class="ti-icon">🏠</span> Home Assistant expert</div>
+  <div class="trust-item"><span class="ti-icon">💡</span> Dynamische energieprijzen</div>
+  <div class="trust-item"><span class="ti-icon">📍</span> Lokaal & bereikbaar</div>
+</div>
+
+<!-- OVER ONS -->
+<section id="over-ons">
+  <div class="about-inner">
+    <div class="about-illustration">
+      <div class="about-blob">🧑‍💻</div>
+    </div>
+    <div>
+      <span class="section-label">Over ons</span>
+      <h2 class="section-title">Persoonlijk IT-advies<br/>met een <em>menselijk</em> gezicht</h2>
+      <p class="section-sub">
+        Service Hubert is een vriendelijk IT-bedrijf dat gespecialiseerd is in slimme thuisoplossingen.
+        Wij geloven dat technologie voor iedereen begrijpelijk en toegankelijk moet zijn —
+        van slimme speakers tot een veilig thuisnetwerk.
+      </p>
+      <p class="section-sub" style="margin-top:1rem;">
+        Of u nu een probleem wilt oplossen, een nieuw apparaat wilt instellen of uw huis
+        wilt voorzien van de nieuwste slimme technologie: wij staan voor u klaar.
+        Persoonlijk, duidelijk en zonder vakjargon.
+      </p>
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="num">200+</div>
+          <div class="label">Tevreden klanten</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">5★</div>
+          <div class="label">Gemiddelde score</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">8 jr</div>
+          <div class="label">Ervaring</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">24u</div>
+          <div class="label">Reactietijd</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIENSTEN -->
+<section id="diensten">
+  <div class="diensten-inner">
+    <div class="diensten-header">
+      <span class="section-label">Diensten</span>
+      <h2 class="section-title">Wat wij voor u<br/><em>kunnen betekenen</em></h2>
+      <p class="section-sub">Van installatie tot beheer — wij zorgen dat alles werkt.</p>
+    </div>
+    <div class="diensten-grid">
+      <div class="dienst-card">
+        <div class="dienst-icon">🏠</div>
+        <h3>Home Assistant installatie</h3>
+        <p>Volledige installatie en configuratie van Home Assistant. Uw slimme hub voor het beheren van alle apparaten in huis.</p>
+      </div>
+      <div class="dienst-card">
+        <div class="dienst-icon">☀️</div>
+        <h3>Zonne-energie optimalisatie</h3>
+        <p>Uw apparaten draaien automatisch overdag op zonne-energie. Wasmachine, vaatwasser, laadpaal — alles op het moment dat de zon schijnt.</p>
+      </div>
+      <div class="dienst-card">
+        <div class="dienst-icon">🔋</div>
+        <h3>Stekkerbatterij advies & installatie</h3>
+        <p>Sla zonne-energie op en ontlaad slim op dure momenten. Wij adviseren u thuis welke batterijoplossing bij uw situatie past.</p>
+      </div>
+      <div class="dienst-card">
+        <div class="dienst-icon">📈</div>
+        <h3>Dynamische energieprijzen</h3>
+        <p>Koppeling met dynamische stroomtarieven (EPEX). Uw batterij laadt automatisch op als stroom goedkoop is en levert terug als het duur is.</p>
+      </div>
+      <div class="dienst-card">
+        <div class="dienst-icon">📡</div>
+        <h3>Netwerk & WiFi</h3>
+        <p>Optimalisatie van uw thuisnetwerk voor maximale snelheid, bereik en stabiliteit — essentieel voor een goed werkend smart home.</p>
+      </div>
+      <div class="dienst-card">
+        <div class="dienst-icon">💻</div>
+        <h3>IT support & advies</h3>
+        <p>Hulp bij computers, tablets, slimme apparaten en alles daartussenin. Persoonlijk, duidelijk en zonder vakjargon.</p>
+        <ul style="margin-top:1rem; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:6px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:0.88rem; color:var(--gray); font-weight:700;"><span style="color:#2a7fd4;">✓</span> Opzetten van een eigen domeinnaam</li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:0.88rem; color:var(--gray); font-weight:700;"><span style="color:#2a7fd4;">✓</span> Inrichten van een eigen e-mailserver of -adres</li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:0.88rem; color:var(--gray); font-weight:700;"><span style="color:#2a7fd4;">✓</span> Installeren van kleine bedrijfsnetwerken</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEKKERBATTERIJ SPOTLIGHT -->
+<section id="batterij" style="background: linear-gradient(135deg, #1a2233 0%, #1a3a5c 100%); color: white; padding: 90px 5vw;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;">
+      <div>
+        <span style="display:inline-block; background:rgba(249,115,22,0.2); color:#fb923c; font-size:0.78rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; padding:6px 14px; border-radius:50px; margin-bottom:1rem;">Nieuw — Binnenkort beschikbaar</span>
+        <h2 style="font-family:'DM Serif Display',serif; font-size:clamp(1.8rem,3.5vw,2.6rem); line-height:1.2; margin-bottom:1rem;">De <em style="color:#5ca8e8; font-style:italic;">stekkerbatterij</em> — slim opslaan & besparen</h2>
+        <p style="color:rgba(255,255,255,0.7); font-size:1rem; line-height:1.75; font-weight:600; margin-bottom:1.5rem;">
+          Een stekkerbatterij sluit u gewoon in het stopcontact — geen grote installatie, geen hoge investeringskosten.
+          Met Home Assistant laadt hij automatisch op als de zon schijnt of de stroomprijs laag is,
+          en levert hij energie terug als de prijzen hoog zijn.
+        </p>
+        <p style="color:rgba(255,255,255,0.7); font-size:1rem; line-height:1.75; font-weight:600; margin-bottom:2rem;">
+          <strong style="color:white;">Vraagt u zich af:</strong> waarom een stekkerbatterij en geen dure 3-fase thuisbatterij?
+          Wij komen graag bij u langs om dit persoonlijk toe te lichten en het beste advies te geven voor uw situatie.
+        </p>
+        <a href="#contact" style="display:inline-block; background:#f97316; color:white; padding:14px 30px; border-radius:50px; font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; text-decoration:none; transition:background .2s;">Gratis adviesgesprek aanvragen</a>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:1.2rem;">
+        <div style="background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:22px 24px; display:flex; align-items:flex-start; gap:16px;">
+          <span style="font-size:2rem; flex-shrink:0;">☀️</span>
+          <div>
+            <div style="font-weight:900; font-size:1rem; margin-bottom:4px;">Opladen op zonne-energie</div>
+            <div style="color:rgba(255,255,255,0.6); font-size:0.9rem; line-height:1.6;">Uw batterij laadt overdag automatisch op als uw zonnepanelen meer produceren dan u verbruikt.</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:22px 24px; display:flex; align-items:flex-start; gap:16px;">
+          <span style="font-size:2rem; flex-shrink:0;">📈</span>
+          <div>
+            <div style="font-weight:900; font-size:1rem; margin-bottom:4px;">Slim gebruik van dynamische prijzen</div>
+            <div style="color:rgba(255,255,255,0.6); font-size:0.9rem; line-height:1.6;">Laden als stroom goedkoop is (bijv. 's nachts of bij overproductie), ontladen als de prijs piekt.</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.12); border-radius:16px; padding:22px 24px; display:flex; align-items:flex-start; gap:16px;">
+          <span style="font-size:2rem; flex-shrink:0;">🔌</span>
+          <div>
+            <div style="font-weight:900; font-size:1rem; margin-bottom:4px;">Eenvoudig in het stopcontact</div>
+            <div style="color:rgba(255,255,255,0.6); font-size:0.9rem; line-height:1.6;">Geen verbouwing of grote installatie nodig. Gewoon insteken en Home Assistant doet de rest.</div>
+          </div>
+        </div>
+        <div style="background:rgba(249,115,22,0.15); border:1.5px solid rgba(249,115,22,0.3); border-radius:16px; padding:22px 24px; display:flex; align-items:flex-start; gap:16px;">
+          <span style="font-size:2rem; flex-shrink:0;">🧪</span>
+          <div>
+            <div style="font-weight:900; font-size:1rem; margin-bottom:4px; color:#fb923c;">Testfase gestart</div>
+            <div style="color:rgba(255,255,255,0.6); font-size:0.9rem; line-height:1.6;">Wij testen momenteel onze eerste stekkerbatterij-oplossingen. Schrijf u in voor updates en wees als eerste.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIJZEN -->
+<section id="prijzen">
+  <div class="prijzen-inner">
+    <div class="prijzen-header">
+      <span class="section-label">Prijzen</span>
+      <h2 class="section-title">Eerlijk & <em>transparant</em></h2>
+      <p class="section-sub">Geen verrassingen achteraf. U weet altijd waar u aan toe bent.</p>
+    </div>
+    <div class="prijzen-grid">
+      <div class="prijs-card">
+        <h3>Eenmalig bezoek</h3>
+        <div class="prijs">€ 65</div>
+        <div class="prijs-sub">per uur (incl. BTW)</div>
+        <ul class="prijs-features">
+          <li><span class="check">✓</span> IT hulp of smart home advies</li>
+          <li><span class="check">✓</span> Installatie of configuratie</li>
+          <li><span class="check">✓</span> Aan huis of op afstand</li>
+          <li><span class="check">✓</span> Geen abonnement nodig</li>
+        </ul>
+        <a href="#contact" class="btn-primary">Afspraak maken</a>
+      </div>
+      <div class="prijs-card featured">
+        <div class="prijs-badge">Meest gekozen</div>
+        <h3>Energie Optimalisatie Pakket</h3>
+        <div class="prijs">€ 149</div>
+        <div class="prijs-sub">eenmalig (incl. BTW)</div>
+        <ul class="prijs-features">
+          <li><span class="check">✓</span> Home Assistant installatie</li>
+          <li><span class="check">✓</span> Koppeling zonnepanelen & apparaten</li>
+          <li><span class="check">✓</span> Dynamische energieprijzen instellen</li>
+          <li><span class="check">✓</span> 1 maand gratis support</li>
+        </ul>
+        <a href="#contact" class="btn-cta">Nu aanvragen</a>
+      </div>
+      <div class="prijs-card">
+        <h3>Batterij Adviesgesprek</h3>
+        <div class="prijs">Gratis</div>
+        <div class="prijs-sub">aan huis, vrijblijvend</div>
+        <ul class="prijs-features">
+          <li><span class="check">✓</span> Persoonlijk advies aan huis</li>
+          <li><span class="check">✓</span> Stekkerbatterij vs. 3-fase uitleg</li>
+          <li><span class="check">✓</span> Berekening van uw besparing</li>
+          <li><span class="check">✓</span> Geen verplichtingen</li>
+        </ul>
+        <a href="#contact" class="btn-primary">Afspraak inplannen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <span class="section-label">Contact</span>
+      <h2>Neem gerust<br/>contact op!</h2>
+      <p>Heeft u een vraag, wilt u een afspraak of bent u benieuwd wat wij voor u kunnen doen? Wij reageren altijd snel en persoonlijk.</p>
+      <div class="contact-detail">
+        <div class="cd-icon">📞</div>
+        <div>
+          <div style="font-size:0.8rem;color:var(--gray);font-weight:700;">Telefoon</div>
+          <div>+31 6 00 00 00 00</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">✉️</div>
+        <div>
+          <div style="font-size:0.8rem;color:var(--gray);font-weight:700;">E-mail</div>
+          <div><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="224b4c444d624f4b484c514e4b4f4f47564a574b510c4c4e">[email&#160;protected]</a></div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">📍</div>
+        <div>
+          <div style="font-size:0.8rem;color:var(--gray);font-weight:700;">Werkgebied</div>
+          <div>Zeeland & omgeving</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="cd-icon">🕐</div>
+        <div>
+          <div style="font-size:0.8rem;color:var(--gray);font-weight:700;">Bereikbaar</div>
+          <div>Ma–Za, 8:00 – 20:00</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div id="formFields">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Voornaam</label>
+            <input type="text" placeholder="Jan" id="fname"/>
+          </div>
+          <div class="form-group">
+            <label>Achternaam</label>
+            <input type="text" placeholder="de Vries" id="lname"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-mailadres</label>
+          <input type="email" placeholder="jan@email.nl" id="email"/>
+        </div>
+        <div class="form-group">
+          <label>Telefoonnummer</label>
+          <input type="tel" placeholder="06 12 34 56 78" id="phone"/>
+        </div>
+        <div class="form-group">
+          <label>Onderwerp</label>
+          <select id="subject">
+            <option value="">Kies een onderwerp...</option>
+            <option>Home Assistant installatie</option>
+            <option>Zonne-energie optimalisatie</option>
+            <option>Stekkerbatterij adviesgesprek</option>
+            <option>Dynamische energieprijzen</option>
+            <option>Netwerk & WiFi</option>
+            <option>IT hulp & support</option>
+            <option>Overig</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Uw bericht</label>
+          <textarea id="message" placeholder="Beschrijf uw vraag of probleem..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Verstuur bericht 📨</button>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">✅</div>
+        <div style="font-size:1.1rem;font-weight:900;margin-bottom:0.4rem;">Bericht ontvangen!</div>
+        <div>Wij nemen zo snel mogelijk contact met u op. Bedankt!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-text">Service <em>Hubert</em></div>
+      <p>Vriendelijke IT-hulp voor uw slimme thuis. Persoonlijk, duidelijk en altijd dichtbij.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigatie</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#over-ons">Over ons</a></li>
+        <li><a href="#diensten">Diensten</a></li>
+        <li><a href="#prijzen">Prijzen</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="/cdn-cgi/l/email-protection#2f464149406f424645415c434642424a5b475a465c014143"><span class="__cf_email__" data-cfemail="6c05020a032c010506021f0005010109180419051f420200">[email&#160;protected]</span></a></li>
+        <li><a href="tel:+31600000000">+31 6 00 00 00 00</a></li>
+        <li><a href="#">Zeeland & omgeving</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Service Hubert – mijnslimmethuis.nl</p>
+    <p>Alle rechten voorbehouden</p>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  function submitForm() {
+    const fname = document.getElementById('fname').value;
+    const email = document.getElementById('email').value;
+    if (!fname || !email) {
+      alert('Vul tenminste uw naam en e-mailadres in.');
+      return;
+    }
+    document.getElementById('formFields').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Scroll-fade animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
